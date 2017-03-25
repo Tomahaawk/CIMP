@@ -1,6 +1,5 @@
 package com.gohorse.calculadoraimpostoimportacao.core;
 
-import java.security.Timestamp;
 
 /**
  * Created by Lucas on 24/03/2017.
@@ -10,10 +9,10 @@ public class Moeda {
 
     private String nome;
     private float valor;
-    private Timestamp ultimaConsulta;
+    private String ultimaConsulta;
     private String fonte;
 
-    public Moeda(String nome, float valor, Timestamp ultimaConsulta, String fonte) {
+    public Moeda(String nome, float valor, String ultimaConsulta, String fonte) {
         this.nome = nome;
         this.valor = valor;
         this.ultimaConsulta = ultimaConsulta;
@@ -30,9 +29,7 @@ public class Moeda {
         this.valor = valor;
     }
 
-    public void setUltimaConsulta(Timestamp ultimaConsulta) {
-        this.ultimaConsulta = ultimaConsulta;
-    }
+    public void setUltimaConsulta(String ultimaConsulta) { this.ultimaConsulta = ultimaConsulta; }
 
     public void setFonte(String fonte) {
         this.fonte = fonte;
@@ -47,7 +44,7 @@ public class Moeda {
         return valor;
     }
 
-    public Timestamp getUltimaConsulta() {
+    public String getUltimaConsulta() {
         return ultimaConsulta;
     }
 
