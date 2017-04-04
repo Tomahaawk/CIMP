@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Calculadora Imposto Importacao</string>
+    <string name="cotacao_usd">USD - Dólar</string>
+    <string name="ultima_consulta">Ultima atualização</string>
+    <string name="fonte">Fonte</string>
+    <string name="cotacao">Cotação</string>
+    <string name="taxas">Taxas</string>
+    <string name="cotaçao">Cotação</string>
+    <string name="valores_tributos">Tributos</string>
+    <string name="imposto_importacao">Imposto de importação (%)</string>
+    <string name="iof">IOF (%)</string>
+    <string name="icms">ICMS (%)</string>
 </resources>

@@ -12,9 +12,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * Created by Lucas on 24/03/2017.
- */
 
 public class JsonRequestTask extends AsyncTask<String, Void, String> {
 
@@ -50,6 +47,13 @@ public class JsonRequestTask extends AsyncTask<String, Void, String> {
         }
 
         return sb.toString();
+    }
+
+    @Override
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
+
+
     }
 }
 

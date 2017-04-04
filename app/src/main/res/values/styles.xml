@@ -8,4 +8,15 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="TextViewComum" >
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">@dimen/tamanho_texto</item>
+    </style>
+
+    <style name="TextViewTitulo">
+        <item name="android:textColor">@android:color/holo_blue_dark</item>
+        <item name="android:textSize">@dimen/tamanho_texto_titulo</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

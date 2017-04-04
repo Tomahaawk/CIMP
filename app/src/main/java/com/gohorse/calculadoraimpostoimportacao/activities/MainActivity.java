@@ -3,6 +3,7 @@ package com.gohorse.calculadoraimpostoimportacao.activities;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gohorse.calculadoraimpostoimportacao.R;
 import com.gohorse.calculadoraimpostoimportacao.core.JsonRequestHandler;
@@ -12,7 +13,9 @@ import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView teste;
+    private TextView fonteCotacao;
+    private TextView valorCotacao;
+    private TextView ultimaAtualizacao;
 
     private JSONObject jsonObject = null;
 
@@ -25,12 +28,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        teste = (TextView) findViewById(R.id.testeTextView);
+        fonteCotacao = (TextView) findViewById(R.id.fonte_cotacao_id);
+        valorCotacao = (TextView) findViewById(R.id.valor_cotacao_id);
+        ultimaAtualizacao = (TextView) findViewById(R.id.ultima_att_id);
 
-        JsonRequestHandler jsonRequestHandler = new JsonRequestHandler();
-        moeda = jsonRequestHandler.montarObjeto();
 
-        teste.setText(moeda.getUltimaConsulta());
+        try {
+            JsonRequestHandler jsonRequestHandler = new JsonRequestHandler();
+            moeda = jsonRequestHandler.montarObjeto();
+
+            String cotacaoFormatada = "U$" + String.valueOf(moeda.getValor());
+
+            fonteCotacao.setText( moeda.getFonte() );
+            valorCotacao.setText( cotacaoFormatada );
+            ultimaAtualizacao.setText( moeda.getUltimaConsulta() );
+
+
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "Não foi possível obter o valor da cotação.", Toast.LENGTH_LONG).show();
+        }
 
 
         //CRIAR JOBSCHEDULER

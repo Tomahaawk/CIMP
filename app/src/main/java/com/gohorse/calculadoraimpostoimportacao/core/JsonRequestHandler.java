@@ -1,6 +1,9 @@
 package com.gohorse.calculadoraimpostoimportacao.core;
 
 import android.util.Log;
+import android.widget.Toast;
+
+import com.gohorse.calculadoraimpostoimportacao.activities.MainActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,11 +11,10 @@ import org.json.JSONObject;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
 
-
-/**
- * Created by Lucas on 24/03/2017.
- */
 
 public class JsonRequestHandler {
 
@@ -28,6 +30,7 @@ public class JsonRequestHandler {
 
         try {
             String jsonString = new JsonRequestTask().execute(URL_STRING).get();
+
             jsonObject = new JSONObject(jsonString);
 
             String nome = jsonObject.getJSONObject("valores").getJSONObject("USD").getString("nome");
@@ -49,7 +52,8 @@ public class JsonRequestHandler {
     //Converte a string Timestap para uma data legível
     private String timeStampConverter(String timestamp) {
 
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        String template = "dd/MM/yyyy - HH:mm";
+        SimpleDateFormat formatter = new SimpleDateFormat(template, Locale.US);
         Timestamp ts = new Timestamp( (Long.parseLong(timestamp)) * 1000 ); //1 segundo = 1000 milisegundos
         Date date = new Date( ts.getTime() );
         String data = formatter.format(date);
