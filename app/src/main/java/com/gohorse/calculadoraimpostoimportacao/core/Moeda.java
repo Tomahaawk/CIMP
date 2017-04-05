@@ -1,16 +1,15 @@
 package com.gohorse.calculadoraimpostoimportacao.core;
 
 
-/**
- * Created by Lucas on 24/03/2017.
- */
-
 public class Moeda {
 
     private String nome;
     private float valor;
     private String ultimaConsulta;
     private String fonte;
+
+    public Moeda() {
+    }
 
     public Moeda(String nome, float valor, String ultimaConsulta, String fonte) {
         this.nome = nome;
@@ -26,10 +25,13 @@ public class Moeda {
     }
 
     public void setValor(float valor) {
+
         this.valor = valor;
     }
 
-    public void setUltimaConsulta(String ultimaConsulta) { this.ultimaConsulta = ultimaConsulta; }
+    public void setUltimaConsulta(String ultimaConsulta) {
+        this.ultimaConsulta = ultimaConsulta;
+    }
 
     public void setFonte(String fonte) {
         this.fonte = fonte;
@@ -41,6 +43,7 @@ public class Moeda {
     }
 
     public float getValor() {
+
         return valor;
     }
 

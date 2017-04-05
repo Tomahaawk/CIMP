@@ -1,0 +1,31 @@
+{
+  "estado" : {
+    "Tocantins":17,
+    "Sergipe":17,
+    "São Paulo" :18,
+    "Santa Catarina":17,
+    "Roraima":17,
+    "Rondônia":17,
+    "Rio Grande do Sul":17,
+    "Rio Grande do Norte":17,
+    "Rio de Janeiro":19,
+    "Piauí":17,
+    "Pernambuco":17,
+    "Paraná":18,
+    "Paraíba":17,
+    "Pará":17,
+    "Minas Gerais":18,
+    "Mato Grosso do Sul":17,
+    "Mato Grosso":17,
+    "Maranhão":17,
+    "Goiás":17,
+    "Espírito Santo":17,
+    "Distrito Federal":17,
+    "Ceará":17,
+    "Bahia":17,
+    "Amazonas":17,
+    "Amapá":17,
+    "Alagoas":17,
+    "Acre":17
+  }
+}

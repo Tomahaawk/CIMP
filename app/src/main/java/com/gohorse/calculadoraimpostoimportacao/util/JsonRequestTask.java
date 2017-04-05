@@ -1,4 +1,4 @@
-package com.gohorse.calculadoraimpostoimportacao.core;
+package com.gohorse.calculadoraimpostoimportacao.util;
 
 import android.os.AsyncTask;
 import android.util.IntProperty;
@@ -25,9 +25,6 @@ public class JsonRequestTask extends AsyncTask<String, Void, String> {
         try {
             URL url = new URL(uris[0]);
             httpURLConnection = (HttpURLConnection) url.openConnection();
-
-            int code = httpURLConnection.getResponseCode();
-            Log.e("response code: ", Integer.toString(code));
 
             InputStream in = new BufferedInputStream(httpURLConnection.getInputStream());
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
