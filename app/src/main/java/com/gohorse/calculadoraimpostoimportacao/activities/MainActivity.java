@@ -1,7 +1,12 @@
 package com.gohorse.calculadoraimpostoimportacao.activities;
 
+import android.graphics.Color;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -19,6 +24,7 @@ import java.text.DecimalFormat;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Toolbar toolbar;
     private TextView valorCotacao;
     private TextView valorProdutoBrl;
     private TextView valorImportacaoBrl;
@@ -42,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         valorCotacao = (TextView) findViewById(R.id.valor_cotacao_id);
         valorProdutoBrl = (TextView) findViewById(R.id.tv_valor_prod_brl_id);
         valorImportacaoBrl = (TextView) findViewById(R.id.tv_valor_importacao_id);
@@ -50,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
         valorProdutoUsd = (EditText) findViewById(R.id.et_valor_prod_brl_id);
         valorIcms = (EditText) findViewById(R.id.et_icms_id);
         spinnerEstados = (Spinner) findViewById(R.id.sp_estados_id);
+
+        toolbar.setTitle("CIP");
+        setSupportActionBar(toolbar);
 
 
         try {
@@ -91,11 +101,29 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Não foi possível obter o valor da cotação.", Toast.LENGTH_LONG).show();
         }
 
-
-
         //CRIAR JOBSCHEDULER
-
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.menu_item_sobre_id:
+                return true;
+
+            case R.id.menu_info_dolar:
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 }

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Calculadora Imposto Importacao</string>
+    <string name="app_title">C I P</string>
 
     <string name="cotacao">Cotação</string>
     <string name="cotacao_usd">Cotação Dólar (USD)</string>
@@ -8,7 +9,7 @@
     <string name="fonte">Fonte</string>
 
     <string name="taxas">Taxas</string>
-    <string name="imposto_importacao">Imposto de importação (%)</string>
+    <string name="imposto_importacao">Importação (%)</string>
     <string name="estado">Estado</string>
     <string name="icms">ICMS (%)</string>
 
@@ -19,6 +20,10 @@
     <string name="valor_importacao_brl">Importação (BRL)</string>
     <string name="total">Total</string>
 
+    <string name="hint_valor">0.00</string>
+
+    <string name="menu_item_sobre">Sobre</string>
+    <string name="menu_item_info_dolar">Cotação</string>
 
     <string-array name="array_estados">
         <item>N/A</item>
