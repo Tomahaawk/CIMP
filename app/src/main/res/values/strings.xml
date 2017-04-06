@@ -20,7 +20,8 @@
     <string name="valor_importacao_brl">Importação (BRL)</string>
     <string name="total">Total</string>
 
-    <string name="hint_valor">0.00</string>
+    <string name="hint_valor_brl">R$ 0.00</string>
+    <string name="valor_imposto_importacao">60</string>
 
     <string name="menu_item_sobre">Sobre</string>
     <string name="menu_item_info_dolar">Cotação</string>

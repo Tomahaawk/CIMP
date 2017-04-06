@@ -7,18 +7,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="custom_toolbar" parent="@style/Widget.AppCompat.Toolbar">
-        <item name="titleTextColor">@color/toolbarText</item>
-    </style>
-
-
     <style name="TextViewComum" >
         <item name="android:textColor">@color/primaryText</item>
         <item name="android:textSize">@dimen/texto_padrao</item>
     </style>
 
     <style name="TextViewTitulo">
-        <item name="android:textColor">@color/primaryText</item>
+        <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textSize">@dimen/texto_titulo</item>
         <item name="android:textStyle">bold</item>
     </style>

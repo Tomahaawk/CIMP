@@ -14,7 +14,8 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         android:elevation="4dp"/>
 
     <ScrollView
@@ -25,21 +26,6 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/valor_cotacao_id"
-                style="@style/TextViewComum"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginStart="8dp"
-                android:hint="@string/hint_valor"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textView5"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintLeft_toLeftOf="@+id/guideline"
-                app:layout_constraintRight_toRightOf="parent" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -64,7 +50,7 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.5"
                 tools:layout_editor_absoluteY="81dp"
-                tools:layout_editor_absoluteX="180dp" />
+                tools:layout_editor_absoluteX="206dp" />
 
             <TextView
                 android:id="@+id/textView"
@@ -89,12 +75,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:ems="10"
                 android:hint="Valor U$"
-                android:inputType="number"
+                android:inputType="numberDecimal"
+                android:maxLength="14"
                 app:layout_constraintBaseline_toBaselineOf="@+id/textView"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="@+id/guideline"
@@ -122,7 +109,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="0dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
                 android:maxLines="2"
@@ -141,7 +127,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="24dp"
                 android:text="@string/icms"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -180,36 +166,6 @@
                 app:layout_constraintRight_toLeftOf="@+id/guideline"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <EditText
-                android:id="@+id/et_imposto_id"
-                style="@style/TextViewComum"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginStart="16dp"
-                android:ems="10"
-                android:inputType="number"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textView4"
-                app:layout_constraintRight_toRightOf="parent"
-                android:layout_marginLeft="16dp"
-                app:layout_constraintLeft_toLeftOf="@+id/guideline" />
-
-            <EditText
-                android:id="@+id/et_icms_id"
-                style="@style/TextViewComum"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginStart="16dp"
-                android:ems="10"
-                android:inputType="number"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textView8"
-                app:layout_constraintRight_toRightOf="parent"
-                android:layout_marginLeft="16dp"
-                app:layout_constraintLeft_toLeftOf="@+id/guideline" />
-
             <TextView
                 android:id="@+id/textView14"
                 style="@style/TextViewTitulo"
@@ -225,16 +181,17 @@
             <Spinner
                 android:id="@+id/sp_estados_id"
                 android:layout_width="0dp"
-                android:layout_height="22dp"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="8dp"
                 android:entries="@array/array_estados"
                 android:spinnerMode="dropdown"
                 app:layout_constraintBaseline_toBaselineOf="@+id/textView6"
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_marginLeft="8dp"
-                app:layout_constraintLeft_toLeftOf="@+id/guideline" />
+                app:layout_constraintLeft_toLeftOf="@+id/guideline"
+                app:layout_constraintHorizontal_bias="0.0" />
 
             <TextView
                 android:id="@+id/textView6"
@@ -254,6 +211,7 @@
 
             <TextView
                 android:id="@+id/textView7"
+                style="@style/TextViewSecundaria"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -269,6 +227,7 @@
 
             <TextView
                 android:id="@+id/textView9"
+                style="@style/TextViewSecundaria"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -284,13 +243,14 @@
 
             <TextView
                 android:id="@+id/tv_valor_importacao_id"
+                style="@style/TextViewSecundaria"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginStart="8dp"
-                android:hint="@string/hint_valor"
+                android:layout_marginStart="16dp"
+                android:hint="@string/hint_valor_brl"
                 app:layout_constraintBaseline_toBaselineOf="@+id/textView7"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="@+id/guideline"
@@ -298,13 +258,14 @@
 
             <TextView
                 android:id="@+id/tv_valor_icms_id"
+                style="@style/TextViewSecundaria"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginStart="8dp"
-                android:hint="@string/hint_valor"
+                android:layout_marginStart="16dp"
+                android:hint="@string/hint_valor_brl"
                 app:layout_constraintBaseline_toBaselineOf="@+id/textView9"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="@+id/guideline"
@@ -312,6 +273,7 @@
 
             <TextView
                 android:id="@+id/textView15"
+                style="@style/TextViewSecundaria"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -323,17 +285,18 @@
 
             <TextView
                 android:id="@+id/tv_valor_prod_brl_id"
+                style="@style/TextViewSecundaria"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:hint="@string/hint_valor"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="16dp"
+                android:hint="@string/hint_valor_brl"
                 app:layout_constraintBaseline_toBaselineOf="@+id/textView15"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="@+id/guideline"
-                app:layout_constraintRight_toRightOf="parent"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp" />
+                app:layout_constraintRight_toRightOf="parent" />
 
             <TextView
                 android:id="@+id/tv_valor_total_id"
@@ -341,11 +304,52 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginStart="8dp"
-                android:hint="@string/hint_valor"
+                android:layout_marginStart="16dp"
+                android:hint="@string/hint_valor_brl"
                 app:layout_constraintBaseline_toBaselineOf="@+id/textView10"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <EditText
+                android:id="@+id/et_valor_cotacao_id"
+                style="@style/TextViewComum"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="16dp"
+                android:ems="10"
+                android:inputType="numberDecimal"
+                app:layout_constraintBaseline_toBaselineOf="@+id/textView5"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_imposto_id"
+                style="@style/TextViewComum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:text="@string/valor_imposto_importacao"
+                app:layout_constraintBaseline_toBaselineOf="@+id/textView4"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_icms_id"
+                style="@style/TextViewComum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/textView8"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="@+id/guideline"
                 app:layout_constraintRight_toRightOf="parent" />
