@@ -1,5 +1,6 @@
 package com.gohorse.calculadoraimpostoimportacao.activities;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,7 +13,9 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,9 +26,6 @@ import com.gohorse.calculadoraimpostoimportacao.R;
 import com.gohorse.calculadoraimpostoimportacao.util.JsonRequestHandler;
 import com.gohorse.calculadoraimpostoimportacao.core.Moeda;
 
-import org.json.JSONObject;
-
-import java.text.DecimalFormat;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,11 +36,14 @@ public class MainActivity extends AppCompatActivity {
     private TextView valorIcmsBrl;
     private TextView valorTotalBrl;
     private TextView valorIcms;
-    private TextView valorImpostoImportacao;
+    private TextView valorFreteBrl;
 
     private EditText valorCotacao;
     private EditText valorProdutoUsd;
+    private EditText valorFreteUsd;
     private Spinner spinnerEstados;
+    private Button btCalcular;
+    private ScrollView scrollView;
 
     private JsonRequestHandler jsonRequestHandler;
 
@@ -62,12 +65,15 @@ public class MainActivity extends AppCompatActivity {
         valorImportacaoBrl = (TextView) findViewById(R.id.tv_valor_importacao_id);
         valorIcmsBrl = (TextView) findViewById(R.id.tv_valor_icms_id);
         valorTotalBrl = (TextView) findViewById(R.id.tv_valor_total_id);
-        valorImpostoImportacao = (TextView) findViewById(R.id.tv_imposto_id);
         valorIcms = (TextView) findViewById(R.id.tv_icms_id);
+        valorFreteBrl = (TextView) findViewById(R.id.tv_valor_frete_brl_id);
 
         valorCotacao = (EditText) findViewById(R.id.et_valor_cotacao_id);
         valorProdutoUsd = (EditText) findViewById(R.id.et_valor_prod_brl_id);
+        valorFreteUsd = (EditText) findViewById(R.id.et_valor_frete_id);
         spinnerEstados = (Spinner) findViewById(R.id.sp_estados_id);
+        btCalcular = (Button) findViewById(R.id.bt_calcular_id);
+        scrollView = (ScrollView) findViewById(R.id.scroll_view_id);
 
         toolbar.setTitle("CIP");
         setSupportActionBar(toolbar);
@@ -106,9 +112,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 InputMethodManager imm =(InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(valorCotacao.getWindowToken(), 0);
-                imm.hideSoftInputFromWindow(valorProdutoUsd.getWindowToken(), 0);
-                imm.hideSoftInputFromWindow(valorIcms.getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(v.getWindowToken() ,0);
                 return false;
             }
         });
@@ -119,19 +123,23 @@ public class MainActivity extends AppCompatActivity {
         String valorMoeda = String.valueOf( moeda.getValor() );
         valorCotacao.setText(valorMoeda);
 
-
-        TextView.OnEditorActionListener exampleListener = new TextView.OnEditorActionListener() {
+        btCalcular.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE || event.getAction() == KeyEvent.ACTION_DOWN || event == null) {
-                    calculaValores();
-                    return false;
-                }
-                return true;
-            }
-        };
-        valorProdutoUsd.setOnEditorActionListener(exampleListener);
+            public void onClick(View v) {
+                calculaValores();
+                ObjectAnimator.ofInt(scrollView, "ScrollY", valorTotalBrl.getBottom() ).setDuration(1000).start();
 
+            }
+        });
+
+        btCalcular.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                InputMethodManager imm =(InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                return false;
+            }
+        });
 
 
     }
@@ -160,27 +168,35 @@ public class MainActivity extends AppCompatActivity {
 
     private void calculaValores() {
 
-        double valorCotacaoDolar = Double.parseDouble( valorCotacao.getText().toString() );
+        double valorCotacaoDolar = 0;
+        double produtoUsd = 0;
+        double freteUsd = 0;
         double icmsEstado = 0;
+
+        valorCotacaoDolar = Double.parseDouble( valorCotacao.getText().toString() );
+        produtoUsd = Double.parseDouble( valorProdutoUsd.getText().toString() );
+        freteUsd = Double.parseDouble( valorFreteUsd.getText().toString() );
 
         if(!valorIcms.getText().toString().equals("N/A")) {
             icmsEstado = Double.parseDouble(valorIcms.getText().toString()) / 100;
         }
 
-        double produtoUsd = Double.parseDouble( valorProdutoUsd.getText().toString() );
+        double freteBrl = freteUsd * valorCotacaoDolar;
         double produtoBrl = produtoUsd * valorCotacaoDolar;
         double importacao = produtoBrl * 0.6;
-        double baseCalculo1 = produtoBrl + importacao;
+        double baseCalculo1 = produtoBrl + importacao + freteBrl;
         double baseCalculo2 = baseCalculo1 / (1 - icmsEstado);
         double icms = baseCalculo2 * icmsEstado ;
         double total = baseCalculo1 + icms;
 
         String strProdutoBrl = String.format(Locale.US, "R$ %.2f", produtoBrl);
+        String strFreteBrl = String.format(Locale.US, "R$ %.2f", freteBrl);
         String strImportacao = String.format(Locale.US, "R$ %.2f", total);
         String strIcms = String.format(Locale.US, "R$ %.2f", icms);
         String strTotal = String.format(Locale.US, "R$ %.2f", total);
 
         valorProdutoBrl.setText(strProdutoBrl);
+        valorFreteBrl.setText(strFreteBrl);
         valorIcmsBrl.setText(strIcms);
         valorImportacaoBrl.setText(strImportacao);
         valorTotalBrl.setText(strTotal);

@@ -3,7 +3,7 @@
     <string name="app_title">C I P</string>
 
     <string name="cotacao">Cotação</string>
-    <string name="cotacao_usd">Cotação Dólar (USD)</string>
+    <string name="cotacao_usd">Dólar (USD)</string>
 
     <string name="ultima_consulta">Ultima atualização</string>
     <string name="fonte">Fonte</string>
@@ -13,9 +13,11 @@
     <string name="estado">Estado</string>
     <string name="icms">ICMS (%)</string>
 
-    <string name="valores_tributos">Tributos</string>
+    <string name="valores_tributos">Valores e Tributos</string>
+    <string name="valor_frete_usd">Frete (U$)</string>
     <string name="valor_produto_usd">Valor do Produto (U$)</string>
     <string name="valor_produto_brl">Valor do Produto (BRL)</string>
+    <string name="valor_frete_brl">Valor do Frete (BRL)</string>
     <string name="valor_icms_brl">ICMS (BRL)</string>
     <string name="valor_importacao_brl">Importação (BRL)</string>
     <string name="total">Total</string>

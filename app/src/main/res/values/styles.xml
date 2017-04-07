@@ -23,4 +23,11 @@
         <item name="android:textSize">@dimen/texto_padrao</item>
     </style>
 
+    <style name="BotaoElevado">
+        <item name="android:textColor">@color/primaryText</item>
+        <item name="android:background">@android:color/white</item>
+        <item name="android:layout_height">36dp</item>
+        <item name="android:layout_width">88dp</item>
+    </style>
+
 </resources>
