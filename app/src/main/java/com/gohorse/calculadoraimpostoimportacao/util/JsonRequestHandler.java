@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.gohorse.calculadoraimpostoimportacao.R;
+import com.gohorse.calculadoraimpostoimportacao.activities.MainActivity;
 import com.gohorse.calculadoraimpostoimportacao.core.Moeda;
 
 import org.json.JSONException;
@@ -24,15 +25,17 @@ public class JsonRequestHandler {
     private JSONObject jsonObject = null;
     private Moeda moedaUSD;
 
-    private Timestamp timestamp;
-
     private static final String URL_STRING = "http://api.promasters.net.br/cotacao/v1/valores";
+
+    public JsonRequestHandler() {}
 
     //Monta o objeto Moeda a partir do JSON
     public Moeda montarObjeto() {
 
+
         try {
-            String jsonString = new JsonRequestTask().execute(URL_STRING).get();
+            JsonRequestTask jsonRequestTask = new JsonRequestTask();
+            String jsonString = jsonRequestTask.execute(URL_STRING).get();
 
             jsonObject = new JSONObject(jsonString);
 

@@ -1,8 +1,6 @@
 package com.gohorse.calculadoraimpostoimportacao.util;
 
 import android.os.AsyncTask;
-import android.util.IntProperty;
-import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -15,6 +13,12 @@ import java.net.URL;
 
 public class JsonRequestTask extends AsyncTask<String, Void, String> {
 
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+
+    }
 
     @Override
     protected String doInBackground(String... uris) {
@@ -49,7 +53,6 @@ public class JsonRequestTask extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
-
 
     }
 }

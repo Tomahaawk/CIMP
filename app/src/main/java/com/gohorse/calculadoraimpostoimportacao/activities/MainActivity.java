@@ -1,7 +1,11 @@
 package com.gohorse.calculadoraimpostoimportacao.activities;
 
 import android.animation.ObjectAnimator;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -25,6 +29,7 @@ import com.github.rtoshiro.util.format.text.MaskTextWatcher;
 import com.gohorse.calculadoraimpostoimportacao.R;
 import com.gohorse.calculadoraimpostoimportacao.util.JsonRequestHandler;
 import com.gohorse.calculadoraimpostoimportacao.core.Moeda;
+import com.gohorse.calculadoraimpostoimportacao.util.JsonRequestTask;
 
 import java.util.Locale;
 
@@ -45,13 +50,16 @@ public class MainActivity extends AppCompatActivity {
     private Button btCalcular;
     private ScrollView scrollView;
 
+    ProgressDialog progressDialog;
+
     private JsonRequestHandler jsonRequestHandler;
 
-    private Moeda moeda;
+    private Moeda moeda = null;
 
     private SimpleMaskFormatter maskFormatter = new SimpleMaskFormatter("N.NN");
     private MaskTextWatcher maskTextWatcher;
 
+    private static final String URL_STRING = "http://api.promasters.net.br/cotacao/v1/valores";
 
     //CRIAR JOBSCHEDULER
 
@@ -59,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        iniciaProgressDialog();
+        buscaCotacaoOnline();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         valorProdutoBrl = (TextView) findViewById(R.id.tv_valor_prod_brl_id);
@@ -75,17 +86,8 @@ public class MainActivity extends AppCompatActivity {
         btCalcular = (Button) findViewById(R.id.bt_calcular_id);
         scrollView = (ScrollView) findViewById(R.id.scroll_view_id);
 
-        toolbar.setTitle("CIP");
+        toolbar.setTitle("CIMP");
         setSupportActionBar(toolbar);
-
-
-        try {
-            jsonRequestHandler = new JsonRequestHandler();
-            moeda = jsonRequestHandler.montarObjeto();
-
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Não foi possível obter o valor da cotação.", Toast.LENGTH_LONG).show();
-        }
 
         spinnerEstados.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -120,14 +122,23 @@ public class MainActivity extends AppCompatActivity {
         maskTextWatcher = new MaskTextWatcher(valorCotacao, maskFormatter);
         valorCotacao.addTextChangedListener(maskTextWatcher);
 
-        String valorMoeda = String.valueOf( moeda.getValor() );
-        valorCotacao.setText(valorMoeda);
+        if(moeda != null) {
+            String valorMoeda = String.valueOf(moeda.getValor());
+            valorCotacao.setText(valorMoeda);
+        } else {
+            valorCotacao.setText("000");
+        }
 
         btCalcular.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                calculaValores();
-                ObjectAnimator.ofInt(scrollView, "ScrollY", valorTotalBrl.getBottom() ).setDuration(1000).start();
+                if( valorCotacao.getText().equals("") || valorProdutoUsd.getText().equals("") ) {
+                    Toast.makeText(getApplicationContext(), "Preencha todos os campos necessarios!", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    calculaValores();
+                    ObjectAnimator.ofInt(scrollView, "ScrollY", valorTotalBrl.getBottom()).setDuration(1000).start();
+                }
 
             }
         });
@@ -149,6 +160,8 @@ public class MainActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.menu_item_sobre_id:
+                Intent intent = new Intent(getApplicationContext(), SobreActivity.class);
+                startActivity(intent);
                 return true;
 
             case R.id.menu_info_dolar:
@@ -191,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
 
         String strProdutoBrl = String.format(Locale.US, "R$ %.2f", produtoBrl);
         String strFreteBrl = String.format(Locale.US, "R$ %.2f", freteBrl);
-        String strImportacao = String.format(Locale.US, "R$ %.2f", total);
+        String strImportacao = String.format(Locale.US, "R$ %.2f", importacao);
         String strIcms = String.format(Locale.US, "R$ %.2f", icms);
         String strTotal = String.format(Locale.US, "R$ %.2f", total);
 
@@ -201,6 +214,41 @@ public class MainActivity extends AppCompatActivity {
         valorImportacaoBrl.setText(strImportacao);
         valorTotalBrl.setText(strTotal);
 
+    }
+
+    //Verifica se há acesso a internet disponível
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    private void buscaCotacaoOnline() {
+
+        try {
+            if( isNetworkAvailable() ) {
+                jsonRequestHandler = new JsonRequestHandler();
+                moeda = jsonRequestHandler.montarObjeto();
+
+                progressDialog.dismiss();
+
+            } else {
+                Toast.makeText(getApplicationContext(),
+                        "Não foi possível obter a cotação online. Verifique a sua conexão ou insira o valor manualmente.",
+                        Toast.LENGTH_LONG).show();
+            }
+
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "Não foi possível obter o valor da cotação.", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    private void iniciaProgressDialog() {
+        progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setMessage("Atualizando cotacao...");
+        progressDialog.show();
     }
 
 }
