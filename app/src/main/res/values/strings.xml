@@ -14,16 +14,20 @@
     <string name="icms">ICMS (%)</string>
 
     <string name="valores_tributos">Valores e Tributos</string>
-    <string name="valor_frete_usd">Frete (U$)</string>
-    <string name="valor_produto_usd">Valor do Produto (U$)</string>
+    <string name="valor_frete_usd">Frete (USD)</string>
+    <string name="valor_produto_usd">Valor do Produto (USD)</string>
     <string name="valor_produto_brl">Valor do Produto (BRL)</string>
     <string name="valor_frete_brl">Valor do Frete (BRL)</string>
     <string name="valor_icms_brl">ICMS (BRL)</string>
     <string name="valor_importacao_brl">Importação (BRL)</string>
     <string name="total">Total</string>
 
+    <string name="hint_opcional">Opcional</string>
+    <string name="hint_valor">0.00</string>
     <string name="hint_valor_brl">R$ 0.00</string>
     <string name="valor_imposto_importacao">60</string>
+
+    <string name="botao_calcular">Calcular</string>
 
     <string name="menu_item_sobre">Sobre</string>
     <string name="menu_item_info_dolar">Cotação</string>
