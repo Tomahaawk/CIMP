@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">Calculadora Imposto Importacao</string>
-    <string name="app_title">C I P</string>
+    <string name="app_title">CIMP</string>
 
     <string name="cotacao">Cotação</string>
     <string name="cotacao_usd">Dólar (USD)</string>
 
-    <string name="ultima_consulta">Ultima atualização</string>
-    <string name="fonte">Fonte</string>
+<!--    <string name="ultima_consulta">Ultima atualização</string>
+    <string name="fonte">Fonte</string>-->
 
     <string name="taxas">Taxas</string>
     <string name="imposto_importacao">Importação (%)</string>
@@ -27,10 +27,13 @@
     <string name="hint_valor_brl">R$ 0.00</string>
     <string name="valor_imposto_importacao">60</string>
 
+    <string name="botao_limpar">Limpar</string>
     <string name="botao_calcular">Calcular</string>
 
     <string name="menu_item_sobre">Sobre</string>
     <string name="menu_item_info_dolar">Cotação</string>
+
+    <string name="github">github.com/Tomahaawk/CIMP</string>
 
     <string-array name="array_estados">
         <item>N/A</item>
