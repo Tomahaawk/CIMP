@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -24,15 +25,18 @@ import android.widget.Toast;
 import com.github.rtoshiro.util.format.SimpleMaskFormatter;
 import com.github.rtoshiro.util.format.text.MaskTextWatcher;
 import com.gohorse.calculadoraimpostoimportacao.R;
-import com.gohorse.calculadoraimpostoimportacao.util.AsyncTaskCompleteListener;
-import com.gohorse.calculadoraimpostoimportacao.util.JsonRequestHandler;
+import com.gohorse.calculadoraimpostoimportacao.interfaces.AsyncTaskCompleteListener;
+import com.gohorse.calculadoraimpostoimportacao.util.JsonHandler;
 import com.gohorse.calculadoraimpostoimportacao.core.Moeda;
 import com.gohorse.calculadoraimpostoimportacao.util.JsonRequestTask;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements AsyncTaskCompleteListener {
 
+    private View parentView;
     private Toolbar toolbar;
     private TextView valorProdutoBrl;
     private TextView valorImportacaoBrl;
@@ -49,13 +53,14 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
     private Button btCalcular;
     private ScrollView scrollView;
 
-    private JsonRequestHandler jsonRequestHandler;
+    private JsonHandler jsonHandler;
 
     private Moeda moeda = null;
 
     private SimpleMaskFormatter maskFormatter = new SimpleMaskFormatter("N.NN");
     private MaskTextWatcher maskTextWatcher;
 
+    private final Locale locale = new Locale("pt", "BR");
     private static final String URL_STRING = "http://api.promasters.net.br/cotacao/v1/valores";
 
     @Override
@@ -63,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        parentView = findViewById(R.id.parent_view);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         valorProdutoBrl = (TextView) findViewById(R.id.tv_valor_prod_brl_id);
         valorImportacaoBrl = (TextView) findViewById(R.id.tv_valor_importacao_id);
@@ -81,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
         toolbar.setTitle("CIMP");
         setSupportActionBar(toolbar);
 
-        jsonRequestHandler = new JsonRequestHandler();
+        jsonHandler = new JsonHandler();
 
         maskTextWatcher = new MaskTextWatcher(valorCotacao, maskFormatter);
         valorCotacao.addTextChangedListener(maskTextWatcher);
@@ -104,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
                 String estado = spinnerEstados.getItemAtPosition(position).toString();
 
                 if (!estado.equals("N/A")) {
-                    int icms = jsonRequestHandler.recuperaIcmsEstados(getApplicationContext(), estado);
+                    int icms = jsonHandler.recuperaIcmsEstados(getApplicationContext(), estado);
                     valorIcms.setText(String.valueOf(icms));
 
                 } else {
@@ -121,11 +127,8 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
         spinnerEstados.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                /*
-                 * Fecha o teclado caso esteja aberto.
-                 */
-                InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+                esconderTeclado(v);
                 return false;
             }
         });
@@ -135,14 +138,19 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
             @Override
             public void onClick(View v) {
                 if (valorCotacao.getText().toString().equals("") || valorProdutoUsd.getText().toString().equals("")) {
-                    Toast.makeText(getApplicationContext(), "Preencha todos os campos necessarios!", Toast.LENGTH_SHORT).show();
+
+                    if(valorCotacao.getText().toString().equals("")) {
+                        valorCotacao.setError("Campo obrigatório");
+                    }
+
+                    if (valorProdutoUsd.getText().toString().equals("")) {
+                        valorProdutoUsd.setError("Campo obrigatório");
+                    }
+
+                    Snackbar.make(v, "Preencha todos os campos obrigatórios!", Snackbar.LENGTH_LONG).show();
 
                 } else {
                     calculaValores();
-                    /*
-                     * Animação de scroll (1 segundo) até a TextView valorTotalBrl.
-                     */
-                    ObjectAnimator.ofInt(scrollView, "ScrollY", valorTotalBrl.getBottom()).setDuration(1000).start();
                 }
 
             }
@@ -151,11 +159,8 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
         btCalcular.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                /*
-                 * Fecha o spinner/teclado caso esteja aberto.
-                 */
-                InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+                esconderTeclado(v);
                 return false;
             }
         });
@@ -172,7 +177,8 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
                 startActivity(intent);
                 return true;
 
-            case R.id.menu_info_dolar:
+            case R.id.menu_item_atualizar:
+                buscaCotacaoOnline();
                 return true;
 
             default:
@@ -217,11 +223,13 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
         double icms = baseCalculo2 * icmsEstado;
         double total = baseCalculo1 + icms;
 
-        String strProdutoBrl = String.format(Locale.US, "R$ %.2f", produtoBrl);
-        String strFreteBrl = String.format(Locale.US, "R$ %.2f", freteBrl);
-        String strImportacao = String.format(Locale.US, "R$ %.2f", importacao);
-        String strIcms = String.format(Locale.US, "R$ %.2f", icms);
-        String strTotal = String.format(Locale.US, "R$ %.2f", total);
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00", new DecimalFormatSymbols(locale));
+
+        String strProdutoBrl = "R$ " + decimalFormat.format(produtoBrl);
+        String strFreteBrl = "R$ " + decimalFormat.format(freteBrl);
+        String strImportacao = "R$ " + decimalFormat.format(importacao);
+        String strIcms = "R$ " + decimalFormat.format(icms);
+        String strTotal = "R$ " + decimalFormat.format(total);
 
         valorProdutoBrl.setText(strProdutoBrl);
         valorFreteBrl.setText(strFreteBrl);
@@ -229,6 +237,10 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
         valorImportacaoBrl.setText(strImportacao);
         valorTotalBrl.setText(strTotal);
 
+       /*
+        * Animação de scroll (1 segundo) até a TextView valorTotalBrl.
+        */
+        ObjectAnimator.ofInt(scrollView, "ScrollY", valorTotalBrl.getBottom()).setDuration(1000).start();
     }
 
     /*
@@ -255,13 +267,28 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
                 return true;
 
             } else {
-                Toast.makeText(getApplicationContext(),
-                        "Não foi possível obter a cotação online. Verifique a sua conexão ou insira o valor manualmente.",
-                        Toast.LENGTH_LONG).show();
+
+                Snackbar.make(parentView , "Não foi possível obter a cotação online.", Snackbar.LENGTH_LONG)
+                        .setAction("Recarregar", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                buscaCotacaoOnline();
+                            }
+                        })
+                        .show();
 
                 return false;
             }
 
+    }
+
+    /*
+     * Fecha o teclado/spinner caso esteja aberto.
+     */
+    private void esconderTeclado(View v) {
+
+        InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
     /*
@@ -271,7 +298,7 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
     @Override
     public void onTaskComplete(String result) {
 
-        moeda = jsonRequestHandler.montarObjeto(result);
+        moeda = jsonHandler.montarObjeto(result);
 
         if (moeda != null) {
             String valorMoeda = String.valueOf(moeda.getValor());

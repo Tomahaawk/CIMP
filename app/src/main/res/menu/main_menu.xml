@@ -9,8 +9,8 @@
         android:orderInCategory="100"
         app:showAsAction="never"/>
     <item
-        android:id="@+id/menu_info_dolar"
-        android:orderInCategory="90"
-        android:title="@string/menu_item_info_dolar"
+        android:id="@+id/menu_item_atualizar"
+        android:orderInCategory="80"
+        android:title="@string/menu_iten_atualizar"
         app:showAsAction="never"/>
 </menu>

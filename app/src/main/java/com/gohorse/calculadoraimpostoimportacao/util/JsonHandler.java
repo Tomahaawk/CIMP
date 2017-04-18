@@ -18,12 +18,12 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 
-public class JsonRequestHandler {
+public class JsonHandler {
 
     private JSONObject jsonObject = null;
     private Moeda moedaUSD;
 
-    public JsonRequestHandler() {}
+    public JsonHandler() {}
 
     /*
      * Monta o objeto Moeda a partir do JSON

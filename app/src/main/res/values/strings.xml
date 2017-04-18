@@ -30,8 +30,8 @@
     <string name="botao_limpar">Limpar</string>
     <string name="botao_calcular">Calcular</string>
 
+    <string name="menu_iten_atualizar">Atualizar</string>
     <string name="menu_item_sobre">Sobre</string>
-    <string name="menu_item_info_dolar">Cotação</string>
 
     <string name="github">github.com/Tomahaawk/CIMP</string>
 

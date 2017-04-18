@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.gohorse.calculadoraimpostoimportacao.interfaces.AsyncTaskCompleteListener;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -82,9 +84,7 @@ public class JsonRequestTask extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
 
-        if(s != null) {
-            cb.onTaskComplete(s);
-        }
+        cb.onTaskComplete(s);
 
         if(progressDialog.isShowing()) {
             progressDialog.dismiss();

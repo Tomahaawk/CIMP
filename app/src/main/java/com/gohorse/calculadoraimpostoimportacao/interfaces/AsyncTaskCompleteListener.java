@@ -1,4 +1,4 @@
-package com.gohorse.calculadoraimpostoimportacao.util;
+package com.gohorse.calculadoraimpostoimportacao.interfaces;
 
 public interface AsyncTaskCompleteListener {
 
