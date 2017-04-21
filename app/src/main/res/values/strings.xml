@@ -5,24 +5,24 @@
     <string name="cotacao">Cotação</string>
     <string name="cotacao_usd">Dólar (USD)</string>
 
-<!--    <string name="ultima_consulta">Ultima atualização</string>
-    <string name="fonte">Fonte</string>-->
+    <string name="ultima_consulta">Ultima atualização</string>
+    <string name="fonte">Fonte</string>
 
     <string name="taxas">Taxas</string>
     <string name="imposto_importacao">Importação (%)</string>
     <string name="estado">Estado</string>
     <string name="icms">ICMS (%)</string>
 
-    <string name="valores_tributos">Valores e Tributos</string>
+    <string name="valores_tributos">Valores e tributos</string>
     <string name="valor_frete_usd">Frete (USD)</string>
-    <string name="valor_produto_usd">Valor do Produto (USD)</string>
-    <string name="valor_produto_brl">Valor do Produto (BRL)</string>
-    <string name="valor_frete_brl">Valor do Frete (BRL)</string>
+    <string name="valor_produto_usd">Valor do produto (USD)</string>
+    <string name="valor_produto_brl">Valor do produto (BRL)</string>
+    <string name="valor_frete_brl">Valor do frete (BRL)</string>
     <string name="valor_icms_brl">ICMS (BRL)</string>
     <string name="valor_importacao_brl">Importação (BRL)</string>
     <string name="total">Total</string>
 
-    <string name="hint_opcional">Opcional</string>
+    <string name="hint_opcional">Frete (opcional)</string>
     <string name="hint_valor">0.00</string>
     <string name="hint_valor_brl">R$ 0.00</string>
     <string name="valor_imposto_importacao">60</string>
@@ -31,6 +31,7 @@
     <string name="botao_calcular">Calcular</string>
 
     <string name="menu_iten_atualizar">Atualizar</string>
+    <string name="menu_item_ajuda">Ajuda</string>
     <string name="menu_item_sobre">Sobre</string>
 
     <string name="github">github.com/Tomahaawk/CIMP</string>
@@ -65,4 +66,13 @@
         <item>Sergipe</item>
         <item>Tocantins</item>
     </string-array>
+
+    <string name="ajuda_icms">
+        O ICMS é a sigla referente ao imposto sobre circulação de mercadorias e prestação de serviços de transporte interestadual e intermunicipal e comunicação. É também competência de cada estado brasileiro instituir e cobrar os valores que devem ser tabelados referentes aos mesmos. Pode incidir sobre entrada de mercadoria importada do exterior, por pessoa física ou jurídica, ainda quando se tratar de bem destinado a consumo ou ativo permanente do estabelecimento.
+    </string>
+    <string name="ajuda_imposto_importacao">
+        O valor da tributação é definido  pela Receita Federal do Brasil, com alíquota única do Imposto  de Importação de 60% sob o valor aduaneiro (incluindo valor da mercadoria, frete e seguro, se  houver).
+    </string>
+    <string name="icms_ajuda">ICMS</string>
+    <string name="taxa_importacao">Taxa de importação</string>
 </resources>

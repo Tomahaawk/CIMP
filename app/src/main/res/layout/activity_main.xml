@@ -424,13 +424,13 @@
                 app:layout_constraintTop_toBottomOf="@+id/et_valor_frete_id" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/bt_limpar_id"
                 style="@style/BotaoElevado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
                 android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
                 android:text="@string/botao_limpar"
                 app:layout_constraintBaseline_toBaselineOf="@+id/bt_calcular_id"
                 app:layout_constraintHorizontal_bias="0.0"

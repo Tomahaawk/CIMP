@@ -20,7 +20,6 @@ import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.rtoshiro.util.format.SimpleMaskFormatter;
 import com.github.rtoshiro.util.format.text.MaskTextWatcher;
@@ -51,11 +50,13 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
 
     private Spinner spinnerEstados;
     private Button btCalcular;
+    private Button btLimpar;
     private ScrollView scrollView;
 
     private JsonHandler jsonHandler;
 
     private Moeda moeda = null;
+    private boolean isUpdated = false;
 
     private SimpleMaskFormatter maskFormatter = new SimpleMaskFormatter("N.NN");
     private MaskTextWatcher maskTextWatcher;
@@ -82,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
         valorFreteUsd = (EditText) findViewById(R.id.et_valor_frete_id);
         spinnerEstados = (Spinner) findViewById(R.id.sp_estados_id);
         btCalcular = (Button) findViewById(R.id.bt_calcular_id);
+        btLimpar = (Button) findViewById(R.id.bt_limpar_id);
         scrollView = (ScrollView) findViewById(R.id.scroll_view_id);
 
         toolbar.setTitle("CIMP");
@@ -92,13 +94,17 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
         maskTextWatcher = new MaskTextWatcher(valorCotacao, maskFormatter);
         valorCotacao.addTextChangedListener(maskTextWatcher);
 
+        if (!isUpdated) {
 
-        if (!buscaCotacaoOnline()) {
+            if (!buscaCotacaoOnline()) {
             /*
              * Se algo der errado, o valor da TextView é passa a ser 0.00.
              */
-            valorCotacao.setText("000");
+                valorCotacao.setText( String.valueOf(0.00) );
+            }
         }
+
+
 
         spinnerEstados.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -144,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
                     }
 
                     if (valorProdutoUsd.getText().toString().equals("")) {
-                        valorProdutoUsd.setError("Campo obrigatório");
+                            valorProdutoUsd.setError("Campo obrigatório");
                     }
 
                     Snackbar.make(v, "Preencha todos os campos obrigatórios!", Snackbar.LENGTH_LONG).show();
@@ -165,6 +171,14 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
             }
         });
 
+        btLimpar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                limpaValores();
+            }
+        });
+
 
     }
 
@@ -173,12 +187,27 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
 
         switch (item.getItemId()) {
             case R.id.menu_item_sobre_id:
-                Intent intent = new Intent(getApplicationContext(), SobreActivity.class);
-                startActivity(intent);
+                Intent intentSobre = new Intent(getApplicationContext(), SobreActivity.class);
+                startActivity(intentSobre);
                 return true;
 
             case R.id.menu_item_atualizar:
                 buscaCotacaoOnline();
+                return true;
+
+            case R.id.menu_item_ajuda:
+                Intent intentAjuda = new Intent(getApplicationContext(), AjudaActivity.class);
+                if(moeda != null) {
+                    intentAjuda.putExtra("ultimaAtt", moeda.getUltimaConsulta());
+                    intentAjuda.putExtra("fonte", moeda.getFonte());
+
+                } else {
+                    intentAjuda.putExtra("ultimaAtt", "Não foi possível obter a ultima atualização.");
+                    intentAjuda.putExtra("fonte", "Verifique sua conexão e tente atualizar a cotação.");
+
+                }
+
+                startActivity(intentAjuda);
                 return true;
 
             default:
@@ -268,14 +297,7 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
 
             } else {
 
-                Snackbar.make(parentView , "Não foi possível obter a cotação online.", Snackbar.LENGTH_LONG)
-                        .setAction("Recarregar", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                buscaCotacaoOnline();
-                            }
-                        })
-                        .show();
+                Snackbar.make(parentView , "Não foi possível atualizar a cotação online.", Snackbar.LENGTH_LONG).show();
 
                 return false;
             }
@@ -292,6 +314,20 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
     }
 
     /*
+     * Limpa o valor de todos os campos
+     */
+    private void limpaValores() {
+        spinnerEstados.setSelection(0);
+        valorFreteUsd.setText("");
+        valorProdutoUsd.setText("");
+        valorProdutoBrl.setText("");
+        valorFreteBrl.setText("");
+        valorIcmsBrl.setText("");
+        valorImportacaoBrl.setText("");
+        valorTotalBrl.setText("");
+    }
+
+    /*
      * Metodo executado após AsyncTask concluir.
      * Se acontecer algum problema na hora de buscar a cotação, o valor da TextView passa a ser 0.00.
      */
@@ -304,9 +340,16 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
             String valorMoeda = String.valueOf(moeda.getValor());
             valorCotacao.setText(valorMoeda);
 
+            if(valorCotacao.getError() != null) {
+                valorCotacao.setError(null);
+            }
+
+
         } else {
-            valorCotacao.setText("000");
+            valorCotacao.setText( String.valueOf(0.00) );
         }
+
+        isUpdated = true;
     }
 
 
