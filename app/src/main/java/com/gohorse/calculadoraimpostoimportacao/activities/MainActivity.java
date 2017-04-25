@@ -6,19 +6,22 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.github.rtoshiro.util.format.SimpleMaskFormatter;
@@ -33,9 +36,11 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
+import fr.ganfra.materialspinner.MaterialSpinner;
+
 public class MainActivity extends AppCompatActivity implements AsyncTaskCompleteListener {
 
-    private View parentView;
+    private View parentView; //Utilizado para criar snackbar.
     private Toolbar toolbar;
     private TextView valorProdutoBrl;
     private TextView valorImportacaoBrl;
@@ -44,11 +49,14 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
     private TextView valorIcms;
     private TextView valorFreteBrl;
 
+    private TextInputLayout textInputLayoutProduto;
+    private TextInputLayout textInputLayoutCotacao;
+
     private EditText valorCotacao;
     private EditText valorProdutoUsd;
     private EditText valorFreteUsd;
 
-    private Spinner spinnerEstados;
+    private MaterialSpinner spinnerEstados;
     private Button btCalcular;
     private Button btLimpar;
     private ScrollView scrollView;
@@ -56,18 +64,18 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
     private JsonHandler jsonHandler;
 
     private Moeda moeda = null;
-    private boolean isUpdated = false;
 
-    private SimpleMaskFormatter maskFormatter = new SimpleMaskFormatter("N.NN");
+    private final SimpleMaskFormatter maskFormatter = new SimpleMaskFormatter("N.NN");
     private MaskTextWatcher maskTextWatcher;
 
     private final Locale locale = new Locale("pt", "BR");
-    private static final String URL_STRING = "http://api.promasters.net.br/cotacao/v1/valores";
+    private final String URL_STRING = "http://api.promasters.net.br/cotacao/v1/valores";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main2);
 
         parentView = findViewById(R.id.parent_view);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -81,10 +89,14 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
         valorCotacao = (EditText) findViewById(R.id.et_valor_cotacao_id);
         valorProdutoUsd = (EditText) findViewById(R.id.et_valor_prod_brl_id);
         valorFreteUsd = (EditText) findViewById(R.id.et_valor_frete_id);
-        spinnerEstados = (Spinner) findViewById(R.id.sp_estados_id);
+
+        textInputLayoutCotacao = (TextInputLayout) findViewById(R.id.tipl_valor_cotacao);
+        textInputLayoutProduto = (TextInputLayout) findViewById(R.id.tipl_valor_produto);
+
         btCalcular = (Button) findViewById(R.id.bt_calcular_id);
         btLimpar = (Button) findViewById(R.id.bt_limpar_id);
         scrollView = (ScrollView) findViewById(R.id.scroll_view_id);
+        spinnerEstados = (MaterialSpinner) findViewById(R.id.sp_estados_id);
 
         toolbar.setTitle("CIMP");
         setSupportActionBar(toolbar);
@@ -94,40 +106,35 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
         maskTextWatcher = new MaskTextWatcher(valorCotacao, maskFormatter);
         valorCotacao.addTextChangedListener(maskTextWatcher);
 
-        if (!isUpdated) {
-
-            if (!buscaCotacaoOnline()) {
+        if (!buscaCotacaoOnline()) {
             /*
              * Se algo der errado, o valor da TextView é passa a ser 0.00.
              */
-                valorCotacao.setText( String.valueOf(0.00) );
-            }
+            valorCotacao.setText( String.valueOf(0.00) );
         }
 
-
+        final String[] ITEMS = getResources().getStringArray( R.array.array_estados );
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, ITEMS);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerEstados.setAdapter(adapter);
 
         spinnerEstados.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 /*
                  * Atualiza a TextView ICMS de acordo com o estado selecionado;
-                 * N/A - Não se Aplica
                  */
                 String estado = spinnerEstados.getItemAtPosition(position).toString();
 
-                if (!estado.equals("N/A")) {
-                    int icms = jsonHandler.recuperaIcmsEstados(getApplicationContext(), estado);
-                    valorIcms.setText(String.valueOf(icms));
-
-                } else {
-                    valorIcms.setText("N/A");
-                }
+                int icms = jsonHandler.recuperaIcmsEstados(getApplicationContext(), estado);
+                valorIcms.setText(String.valueOf(icms));
 
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+                valorIcms.setText("0");
             }
         });
         spinnerEstados.setOnTouchListener(new View.OnTouchListener() {
@@ -135,7 +142,53 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
             public boolean onTouch(View v, MotionEvent event) {
 
                 esconderTeclado(v);
+                if(valorCotacao.hasFocus() || valorProdutoUsd.hasFocus() || valorFreteUsd.hasFocus()) {
+                    getCurrentFocus().clearFocus();
+                }
                 return false;
+            }
+        });
+
+        valorCotacao.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(textInputLayoutCotacao.getError() != null) {
+
+                    textInputLayoutCotacao.setError(null);
+                    textInputLayoutCotacao.setErrorEnabled(false);
+                }
+            }
+        });
+
+        valorProdutoUsd.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(textInputLayoutProduto.getError() != null) {
+
+                    textInputLayoutProduto.setError(null);
+                    textInputLayoutProduto.setErrorEnabled(false);
+                }
+
             }
         });
 
@@ -143,20 +196,29 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
         btCalcular.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (valorCotacao.getText().toString().equals("") || valorProdutoUsd.getText().toString().equals("")) {
 
                     if(valorCotacao.getText().toString().equals("")) {
-                        valorCotacao.setError("Campo obrigatório");
+
+                        textInputLayoutCotacao.setErrorEnabled(true);
+                        textInputLayoutCotacao.setError("Campo obrigatório");
                     }
 
                     if (valorProdutoUsd.getText().toString().equals("")) {
-                            valorProdutoUsd.setError("Campo obrigatório");
+
+                        textInputLayoutProduto.setErrorEnabled(true);
+                        textInputLayoutProduto.setError("Campo obrigatório");
                     }
 
                     Snackbar.make(v, "Preencha todos os campos obrigatórios!", Snackbar.LENGTH_LONG).show();
 
                 } else {
                     calculaValores();
+
+                    if(getCurrentFocus() != null) {
+                        getCurrentFocus().clearFocus();
+                    }
                 }
 
             }
@@ -178,6 +240,8 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
                 limpaValores();
             }
         });
+
+
 
 
     }
@@ -240,7 +304,7 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
             freteUsd = Double.parseDouble(valorFreteUsd.getText().toString());
         }
 
-        if (!valorIcms.getText().toString().equals("N/A")) {
+        if (!valorIcms.getText().toString().equals("")) {
             icmsEstado = Double.parseDouble(valorIcms.getText().toString()) / 100;
         }
 
@@ -340,16 +404,18 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
             String valorMoeda = String.valueOf(moeda.getValor());
             valorCotacao.setText(valorMoeda);
 
-            if(valorCotacao.getError() != null) {
-                valorCotacao.setError(null);
+            /*
+             * Usar o .setText() não aciona o listener, portando, é necessário verificar se há erros.
+             */
+            if(textInputLayoutCotacao.getError() != null) {
+                textInputLayoutCotacao.setError(null);
+                textInputLayoutCotacao.setErrorEnabled(false);
             }
-
 
         } else {
             valorCotacao.setText( String.valueOf(0.00) );
         }
 
-        isUpdated = true;
     }
 
 

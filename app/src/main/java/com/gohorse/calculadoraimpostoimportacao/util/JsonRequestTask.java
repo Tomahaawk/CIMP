@@ -42,7 +42,7 @@ public class JsonRequestTask extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... uris) {
 
-        final int CONN_TIMEOUT = 3000;
+        final int CONN_TIMEOUT = 4000;
         final int CONN_JSON_READ_TIMEOUT = 3000;
 
         HttpURLConnection httpURLConnection = null;

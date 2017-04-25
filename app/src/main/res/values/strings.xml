@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Calculadora Imposto Importacao</string>
     <string name="app_title">CIMP</string>
 
@@ -10,7 +10,7 @@
 
     <string name="taxas">Taxas</string>
     <string name="imposto_importacao">Importação (%)</string>
-    <string name="estado">Estado</string>
+    <string name="estado">Estado (opcional)</string>
     <string name="icms">ICMS (%)</string>
 
     <string name="valores_tributos">Valores e tributos</string>
@@ -37,7 +37,6 @@
     <string name="github">github.com/Tomahaawk/CIMP</string>
 
     <string-array name="array_estados">
-        <item>N/A</item>
         <item>Acre </item>
         <item>Alagoas</item>
         <item>Amapá</item>
@@ -70,9 +69,12 @@
     <string name="ajuda_icms">
         O ICMS é a sigla referente ao imposto sobre circulação de mercadorias e prestação de serviços de transporte interestadual e intermunicipal e comunicação. É também competência de cada estado brasileiro instituir e cobrar os valores que devem ser tabelados referentes aos mesmos. Pode incidir sobre entrada de mercadoria importada do exterior, por pessoa física ou jurídica, ainda quando se tratar de bem destinado a consumo ou ativo permanente do estabelecimento.
     </string>
-    <string name="ajuda_imposto_importacao">
+    <string name="ajuda_imposto_importacao" tools:ignore="StringFormatInvalid">
         O valor da tributação é definido  pela Receita Federal do Brasil, com alíquota única do Imposto  de Importação de 60% sob o valor aduaneiro (incluindo valor da mercadoria, frete e seguro, se  houver).
     </string>
     <string name="icms_ajuda">ICMS</string>
     <string name="taxa_importacao">Taxa de importação</string>
+
+    <string name="cotacao_api_description">Cotação API</string>
+    <string name="github_description">GitHub</string>
 </resources>
