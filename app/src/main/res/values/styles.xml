@@ -21,6 +21,12 @@
 
     <style name="TextViewSecundaria">
         <item name="android:textColor">@color/secondaryText</item>
+        <item name="android:textSize">@dimen/texto_secundario</item>
+        <item name="android:padding">2dp</item>
+    </style>
+
+    <style name="TextViewAjuda">
+        <item name="android:textColor">@color/secondaryText</item>
         <item name="android:textSize">@dimen/texto_padrao</item>
         <item name="android:padding">2dp</item>
     </style>
@@ -31,7 +37,7 @@
     </style>
 
     <style name="BotaoElevado">
-        <item name="android:textColor">@color/primaryText</item>
+        <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:background">@android:color/white</item>
         <item name="android:layout_height">36dp</item>
         <item name="android:layout_width">88dp</item>

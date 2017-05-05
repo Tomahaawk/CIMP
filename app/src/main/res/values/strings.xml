@@ -2,28 +2,22 @@
     <string name="app_name">Calculadora Imposto Importacao</string>
     <string name="app_title">CIMP</string>
 
-    <string name="cotacao">Cotação</string>
-    <string name="cotacao_usd">Dólar (USD)</string>
-
-    <string name="ultima_consulta">Ultima atualização</string>
-    <string name="fonte">Fonte</string>
+    <string name="valores">Valores</string>
+    <string name="cotacao_usd">Cotação (USD)</string>
+    <string name="valor_frete_usd">Frete (USD)</string>
+    <string name="valor_produto_usd">Produto (USD)</string>
 
     <string name="taxas">Taxas</string>
     <string name="imposto_importacao">Importação (%)</string>
     <string name="estado">Estado (opcional)</string>
     <string name="icms">ICMS (%)</string>
 
-    <string name="valores_tributos">Valores e tributos</string>
-    <string name="valor_frete_usd">Frete (USD)</string>
-    <string name="valor_produto_usd">Valor do produto (USD)</string>
     <string name="valor_produto_brl">Valor do produto (BRL)</string>
     <string name="valor_frete_brl">Valor do frete (BRL)</string>
     <string name="valor_icms_brl">ICMS (BRL)</string>
     <string name="valor_importacao_brl">Importação (BRL)</string>
-    <string name="total">Total</string>
+    <string name="total">Total (BRL)</string>
 
-    <string name="hint_opcional">Frete (opcional)</string>
-    <string name="hint_valor">0.00</string>
     <string name="hint_valor_brl">R$ 0.00</string>
     <string name="valor_imposto_importacao">60</string>
 
@@ -34,7 +28,8 @@
     <string name="menu_item_ajuda">Ajuda</string>
     <string name="menu_item_sobre">Sobre</string>
 
-    <string name="github">github.com/Tomahaawk/CIMP</string>
+    <string name="ultima_consulta">Ultima atualização</string>
+    <string name="fonte">Fonte</string>
 
     <string-array name="array_estados">
         <item>Acre </item>
@@ -72,9 +67,15 @@
     <string name="ajuda_imposto_importacao" tools:ignore="StringFormatInvalid">
         O valor da tributação é definido  pela Receita Federal do Brasil, com alíquota única do Imposto  de Importação de 60% sob o valor aduaneiro (incluindo valor da mercadoria, frete e seguro, se  houver).
     </string>
+
+    <string name="cotacao">Cotação</string>
     <string name="icms_ajuda">ICMS</string>
     <string name="taxa_importacao">Taxa de importação</string>
 
     <string name="cotacao_api_description">Cotação API</string>
     <string name="github_description">GitHub</string>
+    <string name="github">github.com/Tomahaawk/CIMP</string>
+
+    <string name="gohorse_project">GoHorse Project</string>
+    <string name="api_promasters">api.promasters.net.br/cotacao/</string>
 </resources>

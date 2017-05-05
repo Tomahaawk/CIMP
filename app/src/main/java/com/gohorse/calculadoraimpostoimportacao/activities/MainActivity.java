@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_main);
 
         parentView = findViewById(R.id.parent_view);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
         scrollView = (ScrollView) findViewById(R.id.scroll_view_id);
         spinnerEstados = (MaterialSpinner) findViewById(R.id.sp_estados_id);
 
-        toolbar.setTitle("CIMP");
+        toolbar.setTitle( getResources().getString(R.string.app_title) );
         setSupportActionBar(toolbar);
 
         jsonHandler = new JsonHandler();
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
         }
 
         final String[] ITEMS = getResources().getStringArray( R.array.array_estados );
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, ITEMS);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, ITEMS);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerEstados.setAdapter(adapter);
 
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
-                valorIcms.setText("0");
+                valorIcms.setText( String.valueOf(0) );
             }
         });
         spinnerEstados.setOnTouchListener(new View.OnTouchListener() {
@@ -143,7 +143,10 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
 
                 esconderTeclado(v);
                 if(valorCotacao.hasFocus() || valorProdutoUsd.hasFocus() || valorFreteUsd.hasFocus()) {
-                    getCurrentFocus().clearFocus();
+
+                    if(getCurrentFocus() != null) {
+                        getCurrentFocus().clearFocus();
+                    }
                 }
                 return false;
             }
@@ -256,6 +259,10 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
                 return true;
 
             case R.id.menu_item_atualizar:
+                View view = getCurrentFocus();
+                if (view != null) {
+                    esconderTeclado(view);
+                }
                 buscaCotacaoOnline();
                 return true;
 
@@ -382,6 +389,7 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
      */
     private void limpaValores() {
         spinnerEstados.setSelection(0);
+        valorCotacao.setText("");
         valorFreteUsd.setText("");
         valorProdutoUsd.setText("");
         valorProdutoBrl.setText("");
@@ -393,7 +401,7 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
 
     /*
      * Metodo executado após AsyncTask concluir.
-     * Se acontecer algum problema na hora de buscar a cotação, o valor da TextView passa a ser 0.00.
+     * Se acontecer algum problema na hora de buscar a cotação, o valor da EditText passa a ser 0.00.
      */
     @Override
     public void onTaskComplete(String result) {
@@ -411,6 +419,9 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
                 textInputLayoutCotacao.setError(null);
                 textInputLayoutCotacao.setErrorEnabled(false);
             }
+
+            Snackbar.make(parentView , "Valor da cotação foi atualizado!", Snackbar.LENGTH_LONG).show();
+
 
         } else {
             valorCotacao.setText( String.valueOf(0.00) );

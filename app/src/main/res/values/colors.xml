@@ -3,8 +3,6 @@
     <color name="colorPrimary">#3F51B5</color> 500
     <color name="colorPrimaryDark">#303F9F</color> 700
     <color name="colorAccent">#448AFF</color> 800
-    <color name="lightPrimary">#C5CAE9</color>
-    <color name="textIcons">#FFFFFF</color>
     <color name="primaryText">#212121</color>
     <color name="secondaryText">#757575</color>
 </resources>
