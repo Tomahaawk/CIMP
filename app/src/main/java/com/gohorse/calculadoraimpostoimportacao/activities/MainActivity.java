@@ -215,6 +215,8 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskComplete
                     }
 
                     Snackbar.make(v, "Preencha todos os campos obrigatórios!", Snackbar.LENGTH_LONG).show();
+                    ObjectAnimator.ofInt(scrollView, "ScrollY", parentView.getTop()).setDuration(1000).start();
+
 
                 } else {
                     calculaValores();
